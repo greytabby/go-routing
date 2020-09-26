@@ -2,6 +2,7 @@ package regtable
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"regexp"
 	"strings"
@@ -54,8 +55,13 @@ func (ro *Router) Serve(w http.ResponseWriter, r *http.Request) {
 	for _, route := range ro.routes {
 		matches := route.Regex.FindStringSubmatch(r.URL.Path)
 		if len(matches) > 0 {
+
+			// Debug code:
+			// fmt.Println("Match Route", route.Method, route.Regex.String(), matches[0])
+
 			if r.Method != route.Method {
 				allow = append(allow, route.Method)
+				continue
 			}
 			ctx := context.WithValue(r.Context(), ctxKey{}, matches[1:])
 			route.Handler(w, r.WithContext(ctx))
