@@ -57,6 +57,13 @@ func (ro *Router) Serve(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
+	if len(allow) > 0 {
+		w.Header().Set("Allow", strings.Join(allow, ","))
+		http.Error(w, "405 method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	http.NotFound(w, r)
 }
 
 type ctxKey struct{}
