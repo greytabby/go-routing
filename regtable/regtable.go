@@ -40,7 +40,12 @@ func pathToRegex(path string) *regexp.Regexp {
 			continue
 		}
 	}
-	pattern := "/" + strings.Join(subPaths, "/")
+	pattern := strings.Join(subPaths, "/")
+	if len(pattern) == 0 {
+		pattern = "/"
+	}
+	pattern = "^" + pattern + "$"
+	fmt.Println("Pattern:", pattern)
 	return regexp.MustCompile(pattern)
 }
 
